@@ -1,5 +1,5 @@
 # Utf8Ini
-Small and simple INI Parser for UTF-8 data written in C++.
+Small and simple INI Parser for UTF-8 data written in C++. Used in [x64dbg](http://x64dbg.com).
 
 Basically it supports this:
 
