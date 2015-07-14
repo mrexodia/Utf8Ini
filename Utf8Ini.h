@@ -36,7 +36,7 @@ public:
     {
         //initialize
         errorLine = 0;
-        _sections.clear();
+        Clear();
 
         //read lines
         std::vector<std::string> lines;
@@ -56,16 +56,17 @@ public:
             }
         }
         if(curLine.length())
-            lines.push_back(curLine);
+            lines.push_back(trim(curLine));
 
         //parse lines
         std::string section = "";
-        for(auto line : lines)
+        for(const auto & line : lines)
         {
             errorLine++;
             switch(getLineType(line))
             {
             case LineType::Invalid:
+                MessageBoxA(0, line.c_str(), "line", 0);
                 return false;
 
             case LineType::Comment:
@@ -114,6 +115,31 @@ public:
             _sections[trimmedSection] = keyValueMap;
         }
         return true;
+    }
+
+    /**
+    \brief Removes all key/value pairs from a section.
+    \param section The section to clear.
+    \return true if it succeeds, false otherwise.
+    */
+    inline bool ClearSection(const std::string & section)
+    {
+        auto trimmedSection = trim(section);
+        if (!trimmedSection.length())
+            return false;
+        auto found = _sections.find(trimmedSection);
+        if (found == _sections.end())
+            return false;
+            _sections.erase(found);
+        return true;
+    }
+
+    /**
+    \brief Removes all sections.
+    */
+    inline void Clear()
+    {
+        _sections.clear();
     }
 
     /**
@@ -168,12 +194,14 @@ private:
 
     static inline std::string trim(const std::string & str)
     {
+        auto len = str.length();
+        if (!len)
+            return "";
         size_t pre = 0;
         while(str[pre] == ' ')
             pre++;
-        auto len = str.length();
         size_t post = 0;
-        while(str[len - post - 1] == ' ' && post < len)
+        while (str[len - post - 1] == ' ' && post < len)
             post++;
         auto sublen = len - post - pre;
         return sublen > 0 ? str.substr(pre, len - post - pre) : "";
