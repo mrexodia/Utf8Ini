@@ -224,7 +224,7 @@ private:
             return LineType::Empty;
         if(line[0] == '[' && line[len - 1] == ']')
             return LineType::Section;
-        if(line[0] == ';')
+        if(line[0] == ';' || line[0] == '#')
             return LineType::Comment;
         if(line.find('=') != std::string::npos)
             return LineType::KeyValue;
